@@ -10,10 +10,12 @@
 #define __Excercise_1__OFFParser__
 
 #include <iostream>
+#include <map>
 #include "Mesh.h"
+#include "VertexBuffer.h"
 
 namespace OFFParser {
-    Mesh parse(std::ifstream *file);
+    Mesh parse(std::string filename);
 }
 
 #endif /* defined(__Excercise_1__OFFParser__) */

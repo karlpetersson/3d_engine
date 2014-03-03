@@ -14,7 +14,6 @@
 #include <glew.h>
 #include <glfw3.h>
 #include <map>
-#include "VertexBuffer.h"
 
 class ShaderManager {
 private:
@@ -26,6 +25,7 @@ private:
     std::string parseSourceFile(std::string filename);
     GLuint loadVertexShader(std::string source);
     GLuint loadFragmentShader(std::string source);
+    bool shaderStatusOK(int shaderId);
 public:
     static ShaderManager& getInstance() {
         static ShaderManager instance;

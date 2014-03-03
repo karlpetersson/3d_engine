@@ -12,13 +12,24 @@
 #include <iostream>
 #include <glew.h>
 #include <glfw3.h>
+#include "PhongShader.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "Mesh.h"
+#include "Camera.h"
+
+class Scene;
 
 class Renderer {
 private:
     GLFWwindow* window;
+    std::shared_ptr<PhongShader> shader;
 public:
-    Renderer();
-    void Render();
+    Renderer(GLFWwindow* window);
+    ~Renderer();
+    void render(Scene *scene, Camera *camera);
+    bool hasWindowOpen();
 };
 
 #endif /* defined(__Excercise_1__Renderer__) */

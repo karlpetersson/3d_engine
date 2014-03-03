@@ -12,13 +12,24 @@
 #include <iostream>
 #include "ShaderManager.h"
 #include "VertexBuffer.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/gtc/matrix_inverse.hpp"
+#include "Scene.h"
+#include "Mesh.h"
+#include "constants.h"
+#include "Camera.h"
 
 class ShaderProgram {
 protected:
     int id;
+    void init();
 public:
     ShaderProgram() {};
-    virtual void use() {};
+    void use();
+    void prepare(Camera *camera, Mesh *mesh);
+    GLuint getId();
 };
 
 #endif /* defined(__Excercise_1__ShaderProgram__) */

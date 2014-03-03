@@ -9,45 +9,168 @@
 
 #include <iostream>
 #include <fstream>
-#include "Mesh.h"
 #include "OFFParser.h"
-#include <thread>
 #include <glew.h>
 #include <glfw3.h>
 #include "ShaderManager.h"
-#include "SimpleShader.h"
+#include "Renderer.h"
+#include "Camera.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "constants.h"
+
+GLFWwindow* initGl();
+
+float rotationY;
+glm::vec3 translation = glm::vec3(0.0,-1.0,-5.0);
+
+void updateProjection(GLFWwindow* window, Camera *camera);
+
+// Takes a window and generates an updated view-matrix based on keys pressed
+glm::mat4 updateView(GLFWwindow* window) {
+    glm::vec3 velocity;
+    
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        rotationY -= 2.0;
+    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        rotationY += 2.0;
+    }
+    
+    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        velocity.z += cosf(rotationY * M_PI / 180);
+        velocity.x -= sinf(rotationY * M_PI / 180);
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        velocity.z -= cosf(rotationY * M_PI / 180);
+        velocity.x += sinf(rotationY * M_PI / 180);
+    }
+    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        velocity.z += sinf(rotationY * M_PI / 180);
+        velocity.x += cosf(rotationY * M_PI / 180);
+    }
+    if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        velocity.z -= sinf(rotationY * M_PI / 180);
+        velocity.x -= cosf(rotationY * M_PI / 180);
+    }
+    
+    if(glm::length(velocity) > 0) {
+        velocity = glm::normalize(velocity)*0.1f;
+        translation += velocity;
+    }
+    
+    return glm::translate(glm::rotate(glm::mat4(1.0), rotationY, glm::vec3(0.0,1.0,0.0)), translation);
+}
+
+void updateProjection(GLFWwindow* window, Camera *camera) {
+    if(glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+        camera->usePerspectiveProjection();
+    }
+    if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+        camera->useOrthogonalProjection();
+    }
+    if(glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+        camera->useObliqueProjection();
+    }
+    if(glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS) {
+        camera->useObliqueProjection();
+    }
+}
 
 
 int main(int argc, const char * argv[]) {
     
-    std::ifstream file;
-    file.open("/Users/karlpetersson/Workspace/Excercise 1/Excercise 1/space_station.off");
-    if(!file.is_open()) {
-        std::cerr << "Could not open file" << std::endl;
-        return 1;
-    }
-    Mesh mesh = OFFParser::parse(&file);
-    file.close();
+    // init OpenGL
+    GLFWwindow* window = initGl();
     
+    // Create renderer object
+    Renderer renderer = Renderer(window);
+    
+    // Load object files
+    Mesh mesh = OFFParser::parse(PROJECT_PATH + "cooldragon.off");
+    Mesh mesh2 = OFFParser::parse(PROJECT_PATH + "cooldragon.off");
+    Mesh floor = OFFParser::parse(PROJECT_PATH + "plane.off");
+    
+    // Create materials for meshes
+    Material meshMaterial;
+    meshMaterial.ambient = glm::vec4(0.05, 0.1, 0.1, 0.1);
+    meshMaterial.diffuse = glm::vec4(0.1, 0.5, 0.5, 0.5);
+    meshMaterial.specular = glm::vec4(0.8, 0.8, 0.8, 1.0);
+    meshMaterial.shininess = 70.0;
+    
+    Material meshMaterial2;
+    meshMaterial2.ambient = glm::vec4(0.1, 0.05, 0.05, 1.0);
+    meshMaterial2.diffuse = glm::vec4(0.7, 0.3, 0.3, 1.0);
+    meshMaterial2.specular = glm::vec4(0.8, 0.8, 0.8, 1.0);
+    meshMaterial2.shininess = 300.0;
+    
+    Material floorMaterial;
+    floorMaterial.ambient = glm::vec4(0.1, 0.1, 0.1, 1.0);
+    floorMaterial.diffuse = glm::vec4(0.4, 0.4, 0.4, 1.0);
+    floorMaterial.specular = glm::vec4(0.0, 0.0, 0.0, 1.0);
+    floorMaterial.shininess = 15.0;
+
+    // load meshes with materials
+    mesh.load(meshMaterial);
+    mesh2.load(meshMaterial2);
+    
+    mesh.translate(glm::vec3(0.0f ,0.5f, 0.0f));
+    mesh2.translate(glm::vec3(2.0f ,0.5f, 0.0f));
+    
+    // load floormesh
+    floor.load(floorMaterial);
+    floor.translate(glm::vec3(0.0f ,-0.1f, 0.0f));
+    floor.rotate(glm::vec3(-1.0f, 0.0f, 0.0f), 90.0f);
+    floor.scale(glm::vec3(10.0f ,10.0, 1.0f));
+    
+    // Create scene and camera
+    Scene scene = Scene();
+    Camera camera = Camera();
+    
+    // create one light
+    Light light = Light(glm::vec4(0.0f, 4.0f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+    light.translate(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    
+    // Add meshes, light and floor to the scene
+    scene.add(&mesh);
+    scene.add(&mesh2);
+    scene.add(&light);
+    scene.add(&floor);
+
+    while(!glfwWindowShouldClose(window))
+    {
+        // Update the cameras view matrix each frame
+        camera.view = updateView(window);
+        updateProjection(window, &camera);
+        
+        mesh2.rotate(glm::vec3(0.0f, 0.5f, 0.0f), 1.0f);
+
+        // render frame
+        renderer.render(&scene, &camera);
+    }
+    
+    glfwTerminate();
+    
+    return 0;
+}
+
+GLFWwindow* initGl() {
     if(!glfwInit()) {
         std::cerr << "could not initialize glfw" << std::endl;
-        return 1;
+        exit(EXIT_FAILURE);
     }
     
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
- //   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     
-    GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL", NULL, NULL); // Windowed
+    GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL", NULL, NULL);
     if(!window) {
         std::cerr << "could not create glfw window" << std::endl;
         glfwTerminate();
-        return 1;
+        exit(EXIT_FAILURE);
     }
     
     glfwMakeContextCurrent(window);
@@ -55,48 +178,12 @@ int main(int argc, const char * argv[]) {
     glewExperimental = GL_TRUE;
     glewInit();
     
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE);
     
-    mesh.load();
-    SimpleShader shader = SimpleShader();
-    //mesh.bind();
-    shader.use();
-    
-    GLint uniModel = glGetUniformLocation(shader.getId(), "model");
-
-
-    // Set up projection
-    glm::mat4 view = glm::mat4(1.);
-    view = glm::translate(view, glm::vec3(0.0f,0.0f, -40.0f));
-    
-    GLint uniView = glGetUniformLocation(shader.getId(), "view");
-    glUniformMatrix4fv(uniView, 1, GL_FALSE, glm::value_ptr(view));
-    
-    glm::mat4 proj = glm::perspective(45.0f, 800.0f / 600.0f, 0.1f, 1000.0f);
-    GLint uniProj = glGetUniformLocation(shader.getId(), "proj");
-    glUniformMatrix4fv(uniProj, 1, GL_FALSE, glm::value_ptr(proj));
-    
-    while(!glfwWindowShouldClose(window))
-    {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        glm::mat4 model = glm::mat4(1.);
-        model = glm::rotate(model,
-                            (GLfloat)clock() / (GLfloat)CLOCKS_PER_SEC * 360.0f * 5.0f,
-                            glm::vec3(0.5f, 0.5f, 0.5f)
-                            );
-        glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(model));
-        
-        glDrawElements(GL_TRIANGLES, (GLsizei) mesh.indices.size(), GL_UNSIGNED_INT, NULL);
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-    
-    glfwDestroyWindow(window);
-    glfwTerminate();
-    
-    return 0;
+    return window;
 }
-

@@ -8,8 +8,10 @@
 
 #include "ShaderManager.h"
 
+// loads and compiles two shaders(one vertexshader and one fragmentshader) and
+// creates a shader program
 GLuint ShaderManager::load(std::string vertexShader, std::string fragmentShader) {
-    
+
     GLuint vertexShaderId = this->loadVertexShader(vertexShader);
     GLuint fragmentShaderId = this->loadFragmentShader(fragmentShader);
 
@@ -40,11 +42,8 @@ GLuint ShaderManager::loadVertexShader(std::string source) {
     glCompileShader(vertexShader);
     
     // test shader
-    GLint status;
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
-    if(!status) {
-        std::cerr << "could not compile vertex shader" << std::endl;
-        exit(EXIT_FAILURE);
+    if(!shaderStatusOK(vertexShader)) {
+        throw "vertex shader failed to compile";
     }
     
     vertexShaders[source] = vertexShader;
@@ -70,11 +69,8 @@ GLuint ShaderManager::loadFragmentShader(std::string source) {
     glCompileShader(fragmentShader);
     
     // test shader
-    GLint status;
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &status);
-    if(!status) {
-        std::cerr << "could not compile vertex shader" << std::endl;
-        exit(EXIT_FAILURE);
+    if(!shaderStatusOK(fragmentShader)) {
+        throw "Fragment shader failed to compile";
     }
     
     fragmentShaders[source] = fragmentShader;
@@ -82,6 +78,7 @@ GLuint ShaderManager::loadFragmentShader(std::string source) {
     
 }
 
+// Parses a shader source file
 std::string ShaderManager::parseSourceFile(std::string filename) {
     
     std::ifstream file;
@@ -95,5 +92,22 @@ std::string ShaderManager::parseSourceFile(std::string filename) {
                                    (std::istreambuf_iterator<char>()    ) );
     file.close();
     return sourceString;
+}
+
+// Checks if a shader compiled correctly
+bool ShaderManager::shaderStatusOK(int shaderId) {
+    GLint status;
+    glGetShaderiv(shaderId, GL_COMPILE_STATUS, &status);
+    if(status != GL_TRUE) {
+        char buffer[512];
+        glGetShaderInfoLog(shaderId, 512, NULL, buffer);
+        
+        std::string err(buffer);
+        std::cerr << err << std::endl;
+        
+        return false;
+    }
+    
+    return true;
 }
 

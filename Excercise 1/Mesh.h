@@ -12,21 +12,37 @@
 #include <iostream>
 #include <vector>
 #include <memory>
-#include <glew.h>
-
+#include "Object3D.h"
 #include "VertexBuffer.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "constants.h"
 
-class Mesh {
-private:
+struct Material {
+    glm::vec4 ambient;
+    glm::vec4 diffuse;
+    glm::vec4 specular;
+    float shininess;
+};
+
+class Mesh : public Object3D{
+private:    
     GLuint verticesBufferId;
     GLuint indicesBufferId;
+    GLuint vao;
 public:
+    Material material;
+    
     std::vector<unsigned int> indices;
     VertexBuffer *vertices;
     Mesh(std::size_t size);
     ~Mesh();
-    void load();
+    void load(Material m);
     void bind();
+    void unbind();
+    void render(Scene *scene);
 };
+
 
 #endif /* defined(__Excercise_1__Mesh__) */
