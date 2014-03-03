@@ -11,7 +11,7 @@
 		1B0CFD00189FF94400FB1947 /* Light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B0CFCFE189FF94400FB1947 /* Light.cpp */; };
 		1B0CFD0318A03B0C00FB1947 /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B0CFD0118A03B0C00FB1947 /* Camera.cpp */; };
 		1B543A9A18995BD80032FD75 /* Renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B543A9818995BD80032FD75 /* Renderer.cpp */; };
-		1B543A9D1899617C0032FD75 /* Object3Ds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B543A9B1899617B0032FD75 /* Object3Ds.cpp */; };
+		1B543A9D1899617C0032FD75 /* Object3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B543A9B1899617B0032FD75 /* Object3D.cpp */; };
 		1B543AA01899703F0032FD75 /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B543A9E1899703F0032FD75 /* Scene.cpp */; };
 		1B59F19A188EB8FA00CF1A01 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B59F199188EB8FA00CF1A01 /* main.cpp */; };
 		1B59F19C188EB8FA00CF1A01 /* Excercise_1.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 1B59F19B188EB8FA00CF1A01 /* Excercise_1.1 */; };
@@ -300,8 +300,8 @@
 		1B4B456E189802A70072A3C9 /* xstream.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = xstream.hpp; sourceTree = "<group>"; };
 		1B543A9818995BD80032FD75 /* Renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderer.cpp; sourceTree = "<group>"; };
 		1B543A9918995BD80032FD75 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
-		1B543A9B1899617B0032FD75 /* Object3Ds.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object3Ds.cpp; sourceTree = "<group>"; };
-		1B543A9C1899617B0032FD75 /* Object3Ds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object3Ds.h; sourceTree = "<group>"; };
+		1B543A9B1899617B0032FD75 /* Object3D.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object3D.cpp; sourceTree = "<group>"; };
+		1B543A9C1899617B0032FD75 /* Object3D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Object3D.h; sourceTree = "<group>"; };
 		1B543A9E1899703F0032FD75 /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
 		1B543A9F1899703F0032FD75 /* Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
 		1B59F196188EB8FA00CF1A01 /* Excercise 1 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Excercise 1"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -373,8 +373,8 @@
 			children = (
 				1B543A9818995BD80032FD75 /* Renderer.cpp */,
 				1B543A9918995BD80032FD75 /* Renderer.h */,
-				1B543A9B1899617B0032FD75 /* Object3Ds.cpp */,
-				1B543A9C1899617B0032FD75 /* Object3Ds.h */,
+				1B543A9B1899617B0032FD75 /* Object3D.cpp */,
+				1B543A9C1899617B0032FD75 /* Object3D.h */,
 				1B543A9E1899703F0032FD75 /* Scene.cpp */,
 				1B543A9F1899703F0032FD75 /* Scene.h */,
 				1B0CFD0118A03B0C00FB1947 /* Camera.cpp */,
@@ -804,7 +804,7 @@
 				1B59F19A188EB8FA00CF1A01 /* main.cpp in Sources */,
 				1B59F1B4188EE67B00CF1A01 /* Mesh.cpp in Sources */,
 				1BB5A3581897E8F900623BC1 /* ShaderProgram.cpp in Sources */,
-				1B543A9D1899617C0032FD75 /* Object3Ds.cpp in Sources */,
+				1B543A9D1899617C0032FD75 /* Object3D.cpp in Sources */,
 				1B59F1B7188EEB7D00CF1A01 /* OFFParser.cpp in Sources */,
 				1B92C62F18AA384700B22482 /* Makefile in Sources */,
 				1B543AA01899703F0032FD75 /* Scene.cpp in Sources */,
