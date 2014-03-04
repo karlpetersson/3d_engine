@@ -13,22 +13,29 @@
 #include <glew.h>
 #include <glfw3.h>
 #include "PhongShader.h"
+#include "GeometryShader.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "Mesh.h"
 #include "Camera.h"
+#include "GBuffer.h"
 
 class Scene;
 
 class Renderer {
 private:
     GLFWwindow* window;
-    std::shared_ptr<PhongShader> shader;
+    std::shared_ptr<PhongShader> lightingShader;
+    std::shared_ptr<GeometryShader> geometryShader;
 public:
+    GBuffer *m_gbuffer;
+    
     Renderer(GLFWwindow* window);
     ~Renderer();
     void render(Scene *scene, Camera *camera);
+    void geometryPass(Scene *scene, Camera *camera);
+    void lightingPass(Scene *scene, Camera *camera);
     bool hasWindowOpen();
 };
 

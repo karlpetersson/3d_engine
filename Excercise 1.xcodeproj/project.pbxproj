@@ -20,6 +20,10 @@
 		1B59F1BD18900C9600CF1A01 /* VertexBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B59F1BB18900C9500CF1A01 /* VertexBuffer.cpp */; };
 		1B91598A1897DA4C00B50B5D /* ShaderManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1B9159881897DA4C00B50B5D /* ShaderManager.cpp */; };
 		1B92C62F18AA384700B22482 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 1B92C62E18AA384700B22482 /* Makefile */; };
+		1BAC4DE418C4A85400899BA2 /* lightPass.vs in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DE318C4A85400899BA2 /* lightPass.vs */; };
+		1BAC4DE618C4A85E00899BA2 /* lightPass.fs in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DE518C4A85E00899BA2 /* lightPass.fs */; };
+		1BAC4DE918C4A8EB00899BA2 /* GBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DE718C4A8EB00899BA2 /* GBuffer.cpp */; };
+		1BAC4DEC18C6184300899BA2 /* GeometryShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DEA18C6184300899BA2 /* GeometryShader.cpp */; };
 		1BB5A3581897E8F900623BC1 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BB5A3561897E8F900623BC1 /* ShaderProgram.cpp */; };
 		1BEDFE3C1896BB9F00D92C4B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BEDFE3B1896BB9F00D92C4B /* OpenGL.framework */; };
 		1BEDFE3E1896BBAC00D92C4B /* libglfw3.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BEDFE3D1896BBAC00D92C4B /* libglfw3.3.0.dylib */; };
@@ -318,13 +322,19 @@
 		1B9159891897DA4C00B50B5D /* ShaderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderManager.h; sourceTree = "<group>"; };
 		1B92C62E18AA384700B22482 /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
 		1B92C63018AA51A100B22482 /* constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = constants.h; sourceTree = "<group>"; };
+		1BAC4DE318C4A85400899BA2 /* lightPass.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = lightPass.vs; sourceTree = "<group>"; };
+		1BAC4DE518C4A85E00899BA2 /* lightPass.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = lightPass.fs; sourceTree = "<group>"; };
+		1BAC4DE718C4A8EB00899BA2 /* GBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GBuffer.cpp; sourceTree = "<group>"; };
+		1BAC4DE818C4A8EB00899BA2 /* GBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBuffer.h; sourceTree = "<group>"; };
+		1BAC4DEA18C6184300899BA2 /* GeometryShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GeometryShader.cpp; sourceTree = "<group>"; };
+		1BAC4DEB18C6184300899BA2 /* GeometryShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryShader.h; sourceTree = "<group>"; };
 		1BB5A3561897E8F900623BC1 /* ShaderProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderProgram.cpp; sourceTree = "<group>"; };
 		1BB5A3571897E8F900623BC1 /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderProgram.h; sourceTree = "<group>"; };
 		1BEDFE3B1896BB9F00D92C4B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		1BEDFE3D1896BBAC00D92C4B /* libglfw3.3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw3.3.0.dylib; path = ../../../../usr/local/Cellar/glfw3/3.0.3/lib/libglfw3.3.0.dylib; sourceTree = "<group>"; };
 		1BEDFE3F1896BBBD00D92C4B /* libGLEW.1.10.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.1.10.0.dylib; path = ../../../../usr/local/Cellar/glew/1.10.0/lib/libGLEW.1.10.0.dylib; sourceTree = "<group>"; };
-		1BEDFE421896F69800D92C4B /* pointlight.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = pointlight.vert; sourceTree = "<group>"; };
-		1BEDFE431896FD9100D92C4B /* pointlight.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = pointlight.frag; sourceTree = "<group>"; };
+		1BEDFE421896F69800D92C4B /* geometryPass.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geometryPass.vs; sourceTree = "<group>"; };
+		1BEDFE431896FD9100D92C4B /* geometryPass.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = geometryPass.fs; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -362,8 +372,10 @@
 		1B0CFCF8189FE9DE00FB1947 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				1BEDFE421896F69800D92C4B /* pointlight.vert */,
-				1BEDFE431896FD9100D92C4B /* pointlight.frag */,
+				1BEDFE421896F69800D92C4B /* geometryPass.vs */,
+				1BEDFE431896FD9100D92C4B /* geometryPass.fs */,
+				1BAC4DE318C4A85400899BA2 /* lightPass.vs */,
+				1BAC4DE518C4A85E00899BA2 /* lightPass.fs */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -379,6 +391,8 @@
 				1B543A9F1899703F0032FD75 /* Scene.h */,
 				1B0CFD0118A03B0C00FB1947 /* Camera.cpp */,
 				1B0CFD0218A03B0C00FB1947 /* Camera.h */,
+				1BAC4DE718C4A8EB00899BA2 /* GBuffer.cpp */,
+				1BAC4DE818C4A8EB00899BA2 /* GBuffer.h */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -741,6 +755,8 @@
 				1BB5A3571897E8F900623BC1 /* ShaderProgram.h */,
 				1B0CFCF1189E7A6900FB1947 /* PhongShader.cpp */,
 				1B0CFCF2189E7A6900FB1947 /* PhongShader.h */,
+				1BAC4DEA18C6184300899BA2 /* GeometryShader.cpp */,
+				1BAC4DEB18C6184300899BA2 /* GeometryShader.h */,
 			);
 			name = Shader;
 			sourceTree = "<group>";
@@ -796,6 +812,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BAC4DE618C4A85E00899BA2 /* lightPass.fs in Sources */,
+				1BAC4DE418C4A85400899BA2 /* lightPass.vs in Sources */,
 				1B0CFD00189FF94400FB1947 /* Light.cpp in Sources */,
 				1B0CFCF3189E7A6900FB1947 /* PhongShader.cpp in Sources */,
 				1B543A9A18995BD80032FD75 /* Renderer.cpp in Sources */,
@@ -807,6 +825,8 @@
 				1B543A9D1899617C0032FD75 /* Object3D.cpp in Sources */,
 				1B59F1B7188EEB7D00CF1A01 /* OFFParser.cpp in Sources */,
 				1B92C62F18AA384700B22482 /* Makefile in Sources */,
+				1BAC4DE918C4A8EB00899BA2 /* GBuffer.cpp in Sources */,
+				1BAC4DEC18C6184300899BA2 /* GeometryShader.cpp in Sources */,
 				1B543AA01899703F0032FD75 /* Scene.cpp in Sources */,
 				1B59F1BD18900C9600CF1A01 /* VertexBuffer.cpp in Sources */,
 			);
