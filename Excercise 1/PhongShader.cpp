@@ -9,7 +9,7 @@
 #include "PhongShader.h"
 
 PhongShader::PhongShader() {
-    this->id = ShaderManager::getInstance().load(PROJECT_PATH + "geometryPass.vs", PROJECT_PATH + "geometryPass.fs");
+    this->id = ShaderManager::getInstance().load(PROJECT_PATH + "lightPass.vs", PROJECT_PATH + "lightPass.fs");
     
     init();
     glLinkProgram(this->id);

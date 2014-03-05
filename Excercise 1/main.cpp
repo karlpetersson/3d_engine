@@ -103,7 +103,7 @@ int main(int argc, const char * argv[]) {
     meshMaterial2.ambient = glm::vec4(0.1, 0.05, 0.05, 1.0);
     meshMaterial2.diffuse = glm::vec4(0.7, 0.3, 0.3, 1.0);
     meshMaterial2.specular = glm::vec4(0.8, 0.8, 0.8, 1.0);
-    meshMaterial2.shininess = 300.0;
+    meshMaterial2.shininess = 150.0;
     
     Material floorMaterial;
     floorMaterial.ambient = glm::vec4(0.1, 0.1, 0.1, 1.0);
@@ -182,8 +182,8 @@ GLFWwindow* initGl() {
     glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE);
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_ONE, GL_ONE);
     
     return window;
 }

@@ -22,8 +22,8 @@ private:
     void initLights();
 public:
     enum {
-        MATERIAL_BINDING_POINT,
-        LIGHT_BINDING_POINT
+        MATERIAL_BINDING_POINT = 0,
+        LIGHT_BINDING_POINT = 1
     };
     PhongShader();
     void prepare(Scene *scene, Camera *camera, Mesh *mesh);

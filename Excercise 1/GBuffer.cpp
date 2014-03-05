@@ -28,19 +28,20 @@ bool GBuffer::Init(unsigned int WindowWidth, unsigned int WindowHeight)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
+        glBindTexture(GL_TEXTURE_2D, 0);
+        
         // attach to fbo?
         glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, m_textures[i], 0);
-
+        
     }
     
     // depth
     glBindTexture(GL_TEXTURE_2D, m_depthTexture);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32F, WindowWidth, WindowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT,
-                 NULL);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH32F_STENCIL8, WindowWidth, WindowHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT,0);
     glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_depthTexture, 0);
     
     // drawbuffers
-    GLenum DrawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5 };
+    GLenum DrawBuffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5};
     glDrawBuffers(6/*array size*/, DrawBuffers);
     
     GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -64,6 +65,10 @@ void GBuffer::BindForWriting()
 void GBuffer::BindForReading()
 {
     glBindFramebuffer(GL_READ_FRAMEBUFFER, m_fbo);
+}
+
+void GBuffer::Bind() {
+    glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 }
 
 void GBuffer::BindTexture(unsigned int n)

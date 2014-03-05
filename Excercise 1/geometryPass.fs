@@ -14,18 +14,22 @@ layout (std140) uniform Material {
     float shininess;
 };
 
-layout (location = 0) out vec3 def_pos; // "go to GL_COLOR_ATTACHMENT0"
-layout (location = 1) out vec3 def_norm; // "go to GL_COLOR_ATTACHMENT1"
-layout (location = 2) out vec3 def_diffuse; // "go to GL_COLOR_ATTACHMENT2"
-layout (location = 3) out vec3 def_ambient; // "go to GL_COLOR_ATTACHMENT3"
-layout (location = 4) out vec3 def_specular; // "go to GL_COLOR_ATTACHMENT4"
-layout (location = 5) out vec3 def_texcoord; // "go to GL_COLOR_ATTACHMENT5"
+out vec3 def_norm;
+out vec4 def_diffuse;
+out vec4 def_ambient;
+out vec4 def_specular;
+out vec3 def_shininess;
 
 void main()
 {
-    def_pos = DataIn.eyePos;
-    def_norm = DataIn.norm;
+    def_norm = normalize(DataIn.norm);
     def_diffuse = diffuse;
     def_ambient = ambient;
     def_specular = specular;
+    def_shininess.r = shininess;
+    //def_pos = DataIn.eyePos;
+    //def_norm = DataIn.norm;
+    //def_diffuse = diffuse;
+    //def_ambient = ambient;
+    //def_specular = specular;
 }

@@ -19,7 +19,8 @@ private:
     void initMaterials();
 public:
     enum {
-        MATERIAL_BINDING_POINT,
+        MATERIAL_BINDING_POINT = 2,
+        LIGHT_BINDING_POINT = 3
     };
     GeometryShader();
     void prepare(Scene *scene, Camera *camera, Mesh *mesh);

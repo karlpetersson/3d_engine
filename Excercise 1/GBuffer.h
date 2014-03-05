@@ -18,12 +18,12 @@ class GBuffer {
 public:
     
     enum GBUFFER_TEXTURE_TYPE {
-        GBUFFER_TEXTURE_TYPE_POSITION,
+        GBUFFER_TEXTURE_TYPE_COLOR,
         GBUFFER_TEXTURE_TYPE_NORMAL,
         GBUFFER_TEXTURE_TYPE_DIFFUSE,
         GBUFFER_TEXTURE_TYPE_AMBIENT,
         GBUFFER_TEXTURE_TYPE_SPECULAR,
-        GBUFFER_TEXTURE_TYPE_TEXCOORD,
+        GBUFFER_TEXTURE_TYPE_SHININESS,
         GBUFFER_NUM_TEXTURES
     };
     
@@ -33,6 +33,7 @@ public:
     bool Init(unsigned int WindowWidth, unsigned int WindowHeight);
     void BindForWriting();
     void BindForReading();
+    void Bind();
     void BindTexture(unsigned int n);
 
 private:

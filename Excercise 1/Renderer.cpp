@@ -13,15 +13,11 @@ Renderer::Renderer(GLFWwindow* window) {
     this->lightingShader = std::shared_ptr<PhongShader>(new PhongShader());
     this->geometryShader = std::shared_ptr<GeometryShader>(new GeometryShader());
     
-    int *width = nullptr;
-    int *height = nullptr;
-    glfwGetWindowSize(window, width, height);
-    if(width == nullptr || height == nullptr) {
-        std::cerr << "coudlnt get window width/height" << std::endl;
-        exit(EXIT_FAILURE);
-    }
+    int width;
+    int height;
+    glfwGetWindowSize(window, &width, &height);
     this->m_gbuffer = new GBuffer();
-    m_gbuffer->Init(*width, *height);
+    m_gbuffer->Init(width, height);
 }
 
 Renderer::~Renderer() {
@@ -39,8 +35,8 @@ void Renderer::render(Scene *scene, Camera *camera) {
 }
 
 void Renderer::geometryPass(Scene *scene, Camera *camera) {
-    
-    m_gbuffer->BindForWriting();
+    m_gbuffer->Bind();
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // use the current shader
@@ -52,22 +48,14 @@ void Renderer::geometryPass(Scene *scene, Camera *camera) {
         // let shader upload data for that mesh
         this->geometryShader->prepare(scene, camera, *it);
         
-        // render mesh into each texture
-        for (unsigned int i = 0 ; i < GBuffer::GBUFFER_NUM_TEXTURES ; i++) {
-            
-            m_gbuffer->BindTexture(i);
-            
-            (*it)->bind();
-            (*it)->render(scene);
-            (*it)->unbind();
-        }
-        
-        glBindTexture(GL_TEXTURE_2D, 0);
+        (*it)->bind();
+        (*it)->render(scene);
+        (*it)->unbind();
     }
 }
 
 void Renderer::lightingPass(Scene *scene, Camera *camera) {
-    m_gbuffer->BindForReading();
+    m_gbuffer->Bind();
     
     glClearColor (0.2, 0.2, 0.2, 0.0f); // added ambient light here
     glClear (GL_COLOR_BUFFER_BIT);
