@@ -19,7 +19,15 @@ GeometryShader::GeometryShader() {
 // Prepares shader, called each frame
 void GeometryShader::prepare(Scene *scene, Camera *camera, Mesh *mesh) {
     
-    ShaderProgram::prepare(camera, mesh);
+    ShaderProgram::prepare(camera);
+    
+    GLint uniModel = glGetUniformLocation(this->id, "model");
+    glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(mesh->modelMatrix));
+    
+    glm::mat3 m_normal = glm::inverseTranspose(glm::mat3(camera->view * mesh->modelMatrix));
+    
+    GLint uniNormMatrix = glGetUniformLocation(this->id, "m_normal");
+    glUniformMatrix3fv(uniNormMatrix, 1, GL_FALSE, glm::value_ptr(m_normal));
     
     // upload material for current mesh to gpu
     glBindBuffer(GL_UNIFORM_BUFFER, materialsBuffer);

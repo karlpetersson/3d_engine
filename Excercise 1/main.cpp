@@ -91,13 +91,14 @@ int main(int argc, const char * argv[]) {
     Mesh mesh = OFFParser::parse(PROJECT_PATH + "cooldragon.off");
     Mesh mesh2 = OFFParser::parse(PROJECT_PATH + "cooldragon.off");
     Mesh floor = OFFParser::parse(PROJECT_PATH + "plane.off");
-    
+    Mesh quad = OFFParser::parse(PROJECT_PATH + "plane.off");
+
     // Create materials for meshes
     Material meshMaterial;
-    meshMaterial.ambient = glm::vec4(0.05, 0.1, 0.1, 0.1);
-    meshMaterial.diffuse = glm::vec4(0.1, 0.5, 0.5, 0.5);
-    meshMaterial.specular = glm::vec4(0.8, 0.8, 0.8, 1.0);
-    meshMaterial.shininess = 70.0;
+    meshMaterial.ambient = glm::vec4(0.01f, 0.01f, 0.01f, 1.0f);
+    meshMaterial.diffuse = glm::vec4(0.5f, 0.5f, 0.7f, 1.0f);
+    meshMaterial.specular = glm::vec4(0.6f, 0.6f, 0.7f, 1.0f);
+    meshMaterial.shininess = 250.0f;
     
     Material meshMaterial2;
     meshMaterial2.ambient = glm::vec4(0.1, 0.05, 0.05, 1.0);
@@ -114,7 +115,10 @@ int main(int argc, const char * argv[]) {
     // load meshes with materials
     mesh.load(meshMaterial);
     mesh2.load(meshMaterial2);
+    quad.load(meshMaterial);
     
+    renderer.quad = &quad;
+
     mesh.translate(glm::vec3(0.0f ,0.5f, 0.0f));
     mesh2.translate(glm::vec3(2.0f ,0.5f, 0.0f));
     
@@ -182,8 +186,6 @@ GLFWwindow* initGl() {
     glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
-    //glEnable(GL_BLEND);
-    //glBlendFunc(GL_ONE, GL_ONE);
     
     return window;
 }

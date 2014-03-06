@@ -50,9 +50,9 @@ void Mesh::unbind() {
 }
 
 void Mesh::render(Scene *scene) {
-
+    bind();
     glDrawElements(GL_TRIANGLES, (GLsizei) this->indices.size(), GL_UNSIGNED_INT, NULL);
-
+    unbind();
 }
 
 Mesh::~Mesh() {

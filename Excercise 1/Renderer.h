@@ -14,6 +14,7 @@
 #include <glfw3.h>
 #include "PhongShader.h"
 #include "GeometryShader.h"
+#include "DeferredPhongShader.h"
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -28,14 +29,17 @@ private:
     GLFWwindow* window;
     std::shared_ptr<PhongShader> lightingShader;
     std::shared_ptr<GeometryShader> geometryShader;
+    std::shared_ptr<DeferredPhongShader> oldShader;
 public:
     GBuffer *m_gbuffer;
+    Mesh *quad;
     
     Renderer(GLFWwindow* window);
     ~Renderer();
     void render(Scene *scene, Camera *camera);
     void geometryPass(Scene *scene, Camera *camera);
     void lightingPass(Scene *scene, Camera *camera);
+    void forwardRender(Scene *scene, Camera*camera);
     bool hasWindowOpen();
 };
 

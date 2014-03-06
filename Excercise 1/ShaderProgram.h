@@ -28,7 +28,7 @@ protected:
 public:
     ShaderProgram() {};
     void use();
-    void prepare(Camera *camera, Mesh *mesh);
+    void prepare(Camera *camera);
     GLuint getId();
 };
 

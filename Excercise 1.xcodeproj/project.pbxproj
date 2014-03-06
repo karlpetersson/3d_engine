@@ -24,6 +24,12 @@
 		1BAC4DE618C4A85E00899BA2 /* lightPass.fs in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DE518C4A85E00899BA2 /* lightPass.fs */; };
 		1BAC4DE918C4A8EB00899BA2 /* GBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DE718C4A8EB00899BA2 /* GBuffer.cpp */; };
 		1BAC4DEC18C6184300899BA2 /* GeometryShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DEA18C6184300899BA2 /* GeometryShader.cpp */; };
+		1BAC4DEE18C7457900899BA2 /* oldshader.fs in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DED18C7457900899BA2 /* oldshader.fs */; };
+		1BAC4DF018C91EA200899BA2 /* oldshader.vs in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DEF18C91EA200899BA2 /* oldshader.vs */; };
+		1BAC4DF318C91FED00899BA2 /* DeferredPhongShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DF118C91FED00899BA2 /* DeferredPhongShader.cpp */; };
+		1BAC4DF618C92C2600899BA2 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DF418C92C2500899BA2 /* Texture.cpp */; };
+		1BAC4DF918C9315C00899BA2 /* ColorTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DF718C9315C00899BA2 /* ColorTexture.cpp */; };
+		1BAC4DFC18C9316800899BA2 /* DepthTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BAC4DFA18C9316800899BA2 /* DepthTexture.cpp */; };
 		1BB5A3581897E8F900623BC1 /* ShaderProgram.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1BB5A3561897E8F900623BC1 /* ShaderProgram.cpp */; };
 		1BEDFE3C1896BB9F00D92C4B /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BEDFE3B1896BB9F00D92C4B /* OpenGL.framework */; };
 		1BEDFE3E1896BBAC00D92C4B /* libglfw3.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BEDFE3D1896BBAC00D92C4B /* libglfw3.3.0.dylib */; };
@@ -328,6 +334,16 @@
 		1BAC4DE818C4A8EB00899BA2 /* GBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GBuffer.h; sourceTree = "<group>"; };
 		1BAC4DEA18C6184300899BA2 /* GeometryShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GeometryShader.cpp; sourceTree = "<group>"; };
 		1BAC4DEB18C6184300899BA2 /* GeometryShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeometryShader.h; sourceTree = "<group>"; };
+		1BAC4DED18C7457900899BA2 /* oldshader.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = oldshader.fs; sourceTree = "<group>"; };
+		1BAC4DEF18C91EA200899BA2 /* oldshader.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = oldshader.vs; sourceTree = "<group>"; };
+		1BAC4DF118C91FED00899BA2 /* DeferredPhongShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DeferredPhongShader.cpp; sourceTree = "<group>"; };
+		1BAC4DF218C91FED00899BA2 /* DeferredPhongShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeferredPhongShader.h; sourceTree = "<group>"; };
+		1BAC4DF418C92C2500899BA2 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
+		1BAC4DF518C92C2600899BA2 /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
+		1BAC4DF718C9315C00899BA2 /* ColorTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorTexture.cpp; sourceTree = "<group>"; };
+		1BAC4DF818C9315C00899BA2 /* ColorTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorTexture.h; sourceTree = "<group>"; };
+		1BAC4DFA18C9316800899BA2 /* DepthTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DepthTexture.cpp; sourceTree = "<group>"; };
+		1BAC4DFB18C9316800899BA2 /* DepthTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DepthTexture.h; sourceTree = "<group>"; };
 		1BB5A3561897E8F900623BC1 /* ShaderProgram.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShaderProgram.cpp; sourceTree = "<group>"; };
 		1BB5A3571897E8F900623BC1 /* ShaderProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderProgram.h; sourceTree = "<group>"; };
 		1BEDFE3B1896BB9F00D92C4B /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -376,6 +392,8 @@
 				1BEDFE431896FD9100D92C4B /* geometryPass.fs */,
 				1BAC4DE318C4A85400899BA2 /* lightPass.vs */,
 				1BAC4DE518C4A85E00899BA2 /* lightPass.fs */,
+				1BAC4DEF18C91EA200899BA2 /* oldshader.vs */,
+				1BAC4DED18C7457900899BA2 /* oldshader.fs */,
 			);
 			name = Shaders;
 			sourceTree = "<group>";
@@ -393,6 +411,12 @@
 				1B0CFD0218A03B0C00FB1947 /* Camera.h */,
 				1BAC4DE718C4A8EB00899BA2 /* GBuffer.cpp */,
 				1BAC4DE818C4A8EB00899BA2 /* GBuffer.h */,
+				1BAC4DF418C92C2500899BA2 /* Texture.cpp */,
+				1BAC4DF518C92C2600899BA2 /* Texture.h */,
+				1BAC4DF718C9315C00899BA2 /* ColorTexture.cpp */,
+				1BAC4DF818C9315C00899BA2 /* ColorTexture.h */,
+				1BAC4DFA18C9316800899BA2 /* DepthTexture.cpp */,
+				1BAC4DFB18C9316800899BA2 /* DepthTexture.h */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -757,6 +781,8 @@
 				1B0CFCF2189E7A6900FB1947 /* PhongShader.h */,
 				1BAC4DEA18C6184300899BA2 /* GeometryShader.cpp */,
 				1BAC4DEB18C6184300899BA2 /* GeometryShader.h */,
+				1BAC4DF118C91FED00899BA2 /* DeferredPhongShader.cpp */,
+				1BAC4DF218C91FED00899BA2 /* DeferredPhongShader.h */,
 			);
 			name = Shader;
 			sourceTree = "<group>";
@@ -815,15 +841,21 @@
 				1BAC4DE618C4A85E00899BA2 /* lightPass.fs in Sources */,
 				1BAC4DE418C4A85400899BA2 /* lightPass.vs in Sources */,
 				1B0CFD00189FF94400FB1947 /* Light.cpp in Sources */,
+				1BAC4DF918C9315C00899BA2 /* ColorTexture.cpp in Sources */,
 				1B0CFCF3189E7A6900FB1947 /* PhongShader.cpp in Sources */,
 				1B543A9A18995BD80032FD75 /* Renderer.cpp in Sources */,
 				1B91598A1897DA4C00B50B5D /* ShaderManager.cpp in Sources */,
 				1B0CFD0318A03B0C00FB1947 /* Camera.cpp in Sources */,
 				1B59F19A188EB8FA00CF1A01 /* main.cpp in Sources */,
+				1BAC4DFC18C9316800899BA2 /* DepthTexture.cpp in Sources */,
+				1BAC4DF318C91FED00899BA2 /* DeferredPhongShader.cpp in Sources */,
 				1B59F1B4188EE67B00CF1A01 /* Mesh.cpp in Sources */,
+				1BAC4DEE18C7457900899BA2 /* oldshader.fs in Sources */,
 				1BB5A3581897E8F900623BC1 /* ShaderProgram.cpp in Sources */,
 				1B543A9D1899617C0032FD75 /* Object3D.cpp in Sources */,
+				1BAC4DF018C91EA200899BA2 /* oldshader.vs in Sources */,
 				1B59F1B7188EEB7D00CF1A01 /* OFFParser.cpp in Sources */,
+				1BAC4DF618C92C2600899BA2 /* Texture.cpp in Sources */,
 				1B92C62F18AA384700B22482 /* Makefile in Sources */,
 				1BAC4DE918C4A8EB00899BA2 /* GBuffer.cpp in Sources */,
 				1BAC4DEC18C6184300899BA2 /* GeometryShader.cpp in Sources */,

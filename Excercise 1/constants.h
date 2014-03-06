@@ -20,4 +20,14 @@ static const std::string PROJECT_PATH = "/Users/karlpetersson/Workspace/Excercis
 static const std::string PROJECT_PATH = "./";
 #endif
 
+enum TEXTURE_TYPE {
+    TEXTURE_TYPE_NORMAL,
+    TEXTURE_TYPE_DIFFUSE,
+    TEXTURE_TYPE_AMBIENT,
+    TEXTURE_TYPE_SPECULAR,
+    TEXTURE_TYPE_SHININESS,
+    TEXTURE_TYPE_DEPTH,
+    NUM_TEXTURES
+};
+
 #endif

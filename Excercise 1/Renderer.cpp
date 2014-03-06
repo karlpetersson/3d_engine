@@ -12,6 +12,7 @@ Renderer::Renderer(GLFWwindow* window) {
     this->window = window;
     this->lightingShader = std::shared_ptr<PhongShader>(new PhongShader());
     this->geometryShader = std::shared_ptr<GeometryShader>(new GeometryShader());
+    this->oldShader = std::shared_ptr<DeferredPhongShader>(new DeferredPhongShader());
     
     int width;
     int height;
@@ -25,19 +26,48 @@ Renderer::~Renderer() {
 
 // Renders a scene
 void Renderer::render(Scene *scene, Camera *camera) {
+    
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
-    geometryPass(scene, camera);
-    // lightingPass(scene, camera);
+     geometryPass(scene, camera);
+     lightingPass(scene, camera);
+    // forwardRender(scene, camera);
+    
+    //int width;
+    //int height;
+    //glfwGetFramebufferSize(window, &width, &height);
+    
+    // blit framebuffer to standard buffer
+    
+   //  m_gbuffer->blit(0, width, height);
     
     // render frame by swapping buffers
     glfwSwapBuffers(this->window);
     glfwPollEvents();
 }
 
-void Renderer::geometryPass(Scene *scene, Camera *camera) {
-    m_gbuffer->Bind();
+void Renderer::forwardRender(Scene *scene, Camera*camera) {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    
+    // use the current shader
+    this->oldShader->use();
+    
+    // for each mesh registered to the scene
+    for (std::vector<Mesh *>::iterator it = scene->objects.begin() ; it != scene->objects.end(); it++) {
+        
+        // let shader upload data for that mesh
+        this->oldShader->prepare(scene, camera, *it);
+        
+        (*it)->render(scene);
+    }
+}
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+void Renderer::geometryPass(Scene *scene, Camera *camera) {
+    
+    glDepthMask(GL_TRUE);
+
+    m_gbuffer->Bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
     // use the current shader
     this->geometryShader->use();
@@ -48,44 +78,50 @@ void Renderer::geometryPass(Scene *scene, Camera *camera) {
         // let shader upload data for that mesh
         this->geometryShader->prepare(scene, camera, *it);
         
-        (*it)->bind();
         (*it)->render(scene);
-        (*it)->unbind();
     }
+    
+    m_gbuffer->unbind();
 }
 
 void Renderer::lightingPass(Scene *scene, Camera *camera) {
-    m_gbuffer->Bind();
     
-    glClearColor (0.2, 0.2, 0.2, 0.0f); // added ambient light here
-    glClear (GL_COLOR_BUFFER_BIT);
     
+    glDepthMask(GL_FALSE);
     glEnable (GL_BLEND);
-    glBlendEquation (GL_FUNC_ADD);
     glBlendFunc (GL_ONE, GL_ONE); // additive
-    
-    glDisable (GL_DEPTH_TEST);
-    glDepthMask (GL_FALSE);
-    
-    glActiveTexture(GL_TEXTURE0);
-    m_gbuffer->BindTexture(0);
-    glActiveTexture(GL_TEXTURE1);
-    m_gbuffer->BindTexture(1);
-    glActiveTexture(GL_TEXTURE2);
-    m_gbuffer->BindTexture(2);
-    glActiveTexture(GL_TEXTURE3);
-    m_gbuffer->BindTexture(3);
-    glActiveTexture(GL_TEXTURE4);
-    m_gbuffer->BindTexture(4);
-    glActiveTexture(GL_TEXTURE5);
-    m_gbuffer->BindTexture(5);
+    //glDisable (GL_DEPTH_TEST);
+
+    m_gbuffer->unbind();
+
+    //glDisable(GL_CULL_FACE);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    m_gbuffer->BindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+    m_gbuffer->BindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
+    m_gbuffer->BindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_AMBIENT);
+    m_gbuffer->BindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_SPECULAR);
+    m_gbuffer->BindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_SHININESS);
+    m_gbuffer->BindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_DEPTH);
     
     this->lightingShader->use();
-    //this->lightingShader->prepare(scene, camera, mesh);
+    this->lightingShader->prepare(scene, camera);
+
+    quad->render(scene);
     
-    glEnable (GL_DEPTH_TEST);
-    glDepthMask (GL_TRUE);
+    //m_gbuffer->unbind();
+    
+    glDepthMask(GL_TRUE);
     glDisable (GL_BLEND);
+    
+    /*m_gbuffer->BindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
+    m_gbuffer->BindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
+    m_gbuffer->BindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_AMBIENT);
+    m_gbuffer->BindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_SPECULAR);
+    m_gbuffer->BindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_SHININESS);
+    m_gbuffer->BindTexture(GBuffer::GBUFFER_TEXTURE_TYPE_DEPTH);*/
+    
+    //m_gbuffer->unbind();
 
 }
 
