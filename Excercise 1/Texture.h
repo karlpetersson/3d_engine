@@ -20,8 +20,8 @@ public:
     unsigned int t_id;
     int width;
     int height;
-    
-    virtual void init();
+        
+    virtual void init(int width, int height, TEXTURE_TYPE type){};
     void bind();
     void unbind();
 

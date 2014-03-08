@@ -13,6 +13,7 @@
 #include "Texture.h"
 
 class ColorTexture : public Texture{
+public:
     void init(int width, int height, TEXTURE_TYPE type);
 };
 

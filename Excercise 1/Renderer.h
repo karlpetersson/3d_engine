@@ -27,9 +27,9 @@ class Scene;
 class Renderer {
 private:
     GLFWwindow* window;
-    std::shared_ptr<PhongShader> lightingShader;
+    std::shared_ptr<DeferredPhongShader> lightingShader;
     std::shared_ptr<GeometryShader> geometryShader;
-    std::shared_ptr<DeferredPhongShader> oldShader;
+    std::shared_ptr<PhongShader> oldShader;
 public:
     GBuffer *m_gbuffer;
     Mesh *quad;

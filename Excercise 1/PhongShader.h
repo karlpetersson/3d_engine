@@ -11,7 +11,6 @@
 
 #include <iostream>
 #include "ShaderProgram.h"
-#include "GBuffer.h"
 #include <vector>
 
 class PhongShader : public ShaderProgram {
@@ -19,24 +18,15 @@ private:
     GLuint materialsBuffer;
     std::vector<GLuint> lightBuffers;
     GLuint lightsBuffer;
-    
-    GLint inverseProjectionLocation;
-    GLint inverseViewLocation;
-    GLint normalTextureSamplerLocation;
-    GLint diffuseTextureSamplerLocation;
-    GLint ambientTextureSamplerLocation;
-    GLint specularTextureSamplerLocation;
-    GLint shininessTextureSamplerLocation;
-    GLint depthTextureSamplerLocation;
-
     void initMaterials();
     void initLights();
 public:
     enum {
-        LIGHT_BINDING_POINT = 1
+        MATERIAL_BINDING_POINT = 4,
+        LIGHT_BINDING_POINT = 5
     };
     PhongShader();
-    void prepare(Scene *scene, Camera *camera);
+    void prepare(Scene *scene, Camera *camera, Mesh *mesh);
 };
 
 #endif /* defined(__Excercise_1__PhongShader__) */

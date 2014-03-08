@@ -13,23 +13,17 @@ layout (std140) uniform Material {
     vec4 specular;
     float shininess;
 };
-
-out vec3 def_norm;
-out vec3 def_diffuse;
-out vec3 def_ambient;
-out vec3 def_specular;
-out vec3 def_shininess;
+out vec3 outSpecular;
+out vec3 outAmbient;
+out vec3 outNormal;
+out vec3 outDiffuse;
+out vec3 outShininess;
 
 void main()
 {
-    def_norm = normalize(DataIn.norm);
-    def_diffuse = diffuse.xyz;
-    def_ambient = ambient.xyz;
-    def_specular = specular.xyz;
-    def_shininess.x = shininess;
-    //def_pos = DataIn.eyePos;
-    //def_norm = DataIn.norm;
-    //def_diffuse = diffuse;
-    //def_ambient = ambient;
-    //def_specular = specular;
+    outNormal = normalize(DataIn.norm);
+    outDiffuse = diffuse.xyz;
+    outAmbient = ambient.xyz;
+    outSpecular = specular.xyz;
+    outShininess.x = shininess;
 }

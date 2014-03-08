@@ -18,5 +18,5 @@ void main()
     DataOut.norm = normalize(m_normal * normal);
     DataOut.eyePos = view * model * vec4(position, 1.0);
     
-    gl_Position = proj * view * model * vec4(position.x, position.y, position.z, 1.0);
+    gl_Position = proj * view * model * vec4(position, 1.0);
 }

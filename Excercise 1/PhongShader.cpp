@@ -9,37 +9,30 @@
 #include "PhongShader.h"
 
 PhongShader::PhongShader() {
-    this->id = ShaderManager::getInstance().load(PROJECT_PATH + "lightPass.vs", PROJECT_PATH + "lightPass.fs");
+    this->id = ShaderManager::getInstance().load(PROJECT_PATH + "oldshader.vs", PROJECT_PATH + "oldshader.fs");
     
     init();
     glLinkProgram(this->id);
-
+    initMaterials();
     initLights();
-    
-    inverseProjectionLocation = glGetUniformLocation(this->id, "m_inverseProjection");
-    inverseViewLocation = glGetUniformLocation(this->id, "m_inverseView");
-    normalTextureSamplerLocation = glGetUniformLocation(this->id, "tex_normal");
-    diffuseTextureSamplerLocation = glGetUniformLocation(this->id, "tex_diffuse");
-    ambientTextureSamplerLocation = glGetUniformLocation(this->id, "tex_ambient");
-    specularTextureSamplerLocation = glGetUniformLocation(this->id, "tex_shininess");
-    shininessTextureSamplerLocation = glGetUniformLocation(this->id, "tex_specular");
-    depthTextureSamplerLocation = glGetUniformLocation(this->id, "tex_depth");
-
 }
 
-void PhongShader::prepare(Scene *scene, Camera *camera) {
+// Prepares shader, called each frame
+void PhongShader::prepare(Scene *scene, Camera *camera, Mesh *mesh) {
     
     ShaderProgram::prepare(camera);
-
-    glUniformMatrix4fv(inverseProjectionLocation, 1, GL_FALSE, glm::value_ptr(glm::inverse(camera->projection)));
-    glUniformMatrix4fv(inverseViewLocation, 1, GL_FALSE, glm::value_ptr(glm::inverse(camera->view)));
-
-    glUniform1i(normalTextureSamplerLocation, GBuffer::GBUFFER_TEXTURE_TYPE_SHININESS);
-    glUniform1i(diffuseTextureSamplerLocation, GBuffer::GBUFFER_TEXTURE_TYPE_SPECULAR);
-    glUniform1i(ambientTextureSamplerLocation, GBuffer::GBUFFER_TEXTURE_TYPE_AMBIENT);
-    glUniform1i(specularTextureSamplerLocation, GBuffer::GBUFFER_TEXTURE_TYPE_DIFFUSE);
-    glUniform1i(shininessTextureSamplerLocation, GBuffer::GBUFFER_TEXTURE_TYPE_NORMAL);
-    glUniform1i(depthTextureSamplerLocation, GBuffer::GBUFFER_TEXTURE_TYPE_DEPTH);
+    
+    GLint uniModel = glGetUniformLocation(this->id, "model");
+    glUniformMatrix4fv(uniModel, 1, GL_FALSE, glm::value_ptr(mesh->modelMatrix));
+    
+    glm::mat3 m_normal = glm::inverseTranspose(glm::mat3(camera->view * mesh->modelMatrix));
+    
+    GLint uniNormMatrix = glGetUniformLocation(this->id, "m_normal");
+    glUniformMatrix3fv(uniNormMatrix, 1, GL_FALSE, glm::value_ptr(m_normal));
+    
+    // upload material for current mesh to gpu
+    glBindBuffer(GL_UNIFORM_BUFFER, materialsBuffer);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(Material), &mesh->material, GL_DYNAMIC_DRAW);
     
     // upload light data to gpu
     glBindBuffer(GL_UNIFORM_BUFFER, lightsBuffer);
@@ -48,13 +41,30 @@ void PhongShader::prepare(Scene *scene, Camera *camera) {
     }
 }
 
+// Initializes buffer for material uniform
+void PhongShader::initMaterials() {
+    GLuint blockIndex = glGetUniformBlockIndex(id, "Material");
+    if(blockIndex == GL_INVALID_INDEX) {
+        throw "Invalid uniform block index";
+    }
+    
+    GLuint bindingPoint = PhongShader::MATERIAL_BINDING_POINT;
+    
+    glUniformBlockBinding(id, blockIndex, bindingPoint);
+    
+    glGenBuffers(1, &materialsBuffer);
+    glBindBuffer(GL_UNIFORM_BUFFER, materialsBuffer);
+    glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, materialsBuffer);
+    
+}
+
 // initializes buffer for light uniform
 void PhongShader::initLights() {
     GLuint blockIndex = glGetUniformBlockIndex(id, "Light");
     if(blockIndex == GL_INVALID_INDEX) {
         throw "Invalid uniform block index";
     }
-
+    
     GLuint bindingPoint = PhongShader::LIGHT_BINDING_POINT;
     
     glUniformBlockBinding(id, blockIndex, bindingPoint);
@@ -62,5 +72,6 @@ void PhongShader::initLights() {
     glGenBuffers(1, &lightsBuffer);
     glBindBuffer(GL_UNIFORM_BUFFER, lightsBuffer);
     glBindBufferBase(GL_UNIFORM_BUFFER, bindingPoint, lightsBuffer);
-  
+    
 }
+

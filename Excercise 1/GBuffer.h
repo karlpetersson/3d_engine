@@ -36,23 +36,21 @@ public:
     GBuffer() {};
     ~GBuffer() {};
     
-    bool Init(unsigned int WindowWidth, unsigned int WindowHeight);
-    GLuint getTexture(unsigned int n);
-    GLuint getDepthTexture();
-    void Bind();
+    bool init(unsigned int WindowWidth, unsigned int WindowHeight);
+    void bind();
     void unbind();
-    void BindTexture(unsigned int n);
-    void unbindTexture(unsigned int n);
-    void initTexture(int width, int height, int texIndex);
     void blit(GLuint target, int targetWidth, int targetHeight);
-
-
+    void bindTextures();
+    void addColorTexture(std::shared_ptr<ColorTexture> colorTexture);
+    void setDepthTexture(std::shared_ptr<DepthTexture> depthTexture);
+    void updateDrawBuffers();
+    
 private:
     int width;
     int height;
     
-    //std::vector<std::shared_ptr<ColorTexture>> colorTextures;
-   // std::shared_ptr<DepthTexture> depthTexture;
+    std::vector<std::shared_ptr<ColorTexture>> colorTextures;
+    std::shared_ptr<DepthTexture> depthTexture;
 
     
     GLuint m_fbo;

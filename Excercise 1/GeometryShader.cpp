@@ -12,6 +12,13 @@ GeometryShader::GeometryShader() {
     this->id = ShaderManager::getInstance().load(PROJECT_PATH + "geometryPass.vs", PROJECT_PATH + "geometryPass.fs");
     
     init();
+    
+    glBindFragDataLocation(this->id, TEXTURE_TYPE_NORMAL, "outNormal");
+    glBindFragDataLocation(this->id, TEXTURE_TYPE_DIFFUSE, "outDiffuse");
+    glBindFragDataLocation(this->id, TEXTURE_TYPE_AMBIENT, "outAmbient");
+    glBindFragDataLocation(this->id, TEXTURE_TYPE_SPECULAR, "outSpecular");
+    glBindFragDataLocation(this->id, TEXTURE_TYPE_SHININESS, "outShininess");
+    
     glLinkProgram(this->id);
     initMaterials();
 }
