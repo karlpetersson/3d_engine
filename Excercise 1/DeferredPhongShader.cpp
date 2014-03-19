@@ -10,7 +10,7 @@
 #include "DeferredPhongShader.h"
 
 DeferredPhongShader::DeferredPhongShader() {
-    this->id = ShaderManager::getInstance().load(PROJECT_PATH + "lightPass.vs", PROJECT_PATH + "lightPass.fs");
+    this->id = ShaderManager::getInstance().load(PROJECT_PATH + "pointLightDeferredPhong.vs", PROJECT_PATH + "pointLightDeferredPhong.fs");
     
     init();
     
@@ -31,7 +31,7 @@ DeferredPhongShader::DeferredPhongShader() {
     
 }
 
-void DeferredPhongShader::prepare(Scene *scene, Camera *camera) {
+void DeferredPhongShader::prepare(Scene *scene, Camera *camera, Light *light) {
     
     ShaderProgram::prepare(camera);
     
@@ -47,9 +47,9 @@ void DeferredPhongShader::prepare(Scene *scene, Camera *camera) {
     
     // upload light data to gpu
     glBindBuffer(GL_UNIFORM_BUFFER, lightsBuffer);
-    for (std::vector<Light *>::iterator it = scene->lights.begin() ; it != scene->lights.end(); it++) {
-        glBufferData(GL_UNIFORM_BUFFER, sizeof(LightData), &(*it)->data, GL_DYNAMIC_DRAW);
-    }
+    //for (std::vector<Light *>::iterator it = scene->lights.begin() ; it != scene->lights.end(); it++) {
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(LightData), &light->data, GL_DYNAMIC_DRAW);
+    //}
 }
 
 // initializes buffer for light uniform

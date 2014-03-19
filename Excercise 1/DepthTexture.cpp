@@ -8,9 +8,8 @@
 
 #include "DepthTexture.h"
 
-void DepthTexture::init(int width, int height, TEXTURE_TYPE type) {
-    this->width = width;
-    this->height = height;
+void DepthTexture::init(unsigned int width, unsigned int height, TEXTURE_TYPE type) {
+
     this->index = type;
     
     glGenTextures(1, &t_id);

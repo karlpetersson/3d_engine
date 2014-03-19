@@ -21,6 +21,7 @@
 #include "Mesh.h"
 #include "Camera.h"
 #include "GBuffer.h"
+#include "OFFParser.h"
 
 class Scene;
 
@@ -32,7 +33,7 @@ private:
     std::shared_ptr<PhongShader> oldShader;
 public:
     GBuffer *m_gbuffer;
-    Mesh *quad;
+    Mesh quad;
     
     Renderer(GLFWwindow* window);
     ~Renderer();

@@ -9,7 +9,7 @@
 #include "GeometryShader.h"
 
 GeometryShader::GeometryShader() {
-    this->id = ShaderManager::getInstance().load(PROJECT_PATH + "geometryPass.vs", PROJECT_PATH + "geometryPass.fs");
+    this->id = ShaderManager::getInstance().load(PROJECT_PATH + "geometry.vs", PROJECT_PATH + "geometry.fs");
     
     init();
     

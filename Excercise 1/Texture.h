@@ -18,10 +18,8 @@ public:
     
     TEXTURE_TYPE index;
     unsigned int t_id;
-    int width;
-    int height;
-        
-    virtual void init(int width, int height, TEXTURE_TYPE type){};
+    
+    virtual void init(unsigned int width, unsigned int height, TEXTURE_TYPE type){};
     void bind();
     void unbind();
 

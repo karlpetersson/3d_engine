@@ -14,7 +14,7 @@
 
 class DepthTexture : public Texture{
 public:
-    void init(int width, int height, TEXTURE_TYPE type);
+    void init(unsigned int width, unsigned int height, TEXTURE_TYPE type);
 };
 
 #endif /* defined(__Excercise_1__DepthTexture__) */

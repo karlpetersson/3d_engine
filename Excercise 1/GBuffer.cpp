@@ -40,13 +40,25 @@ bool GBuffer::init(unsigned int WindowWidth, unsigned int WindowHeight)
     shininessTexture->init(width, height, TEXTURE_TYPE_SHININESS);
     addColorTexture(shininessTexture);
     
+    // check status of fbo
+    bind();
+    GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    
+    if (Status != GL_FRAMEBUFFER_COMPLETE) {
+        fprintf(stderr, "frame buffer error, status: 0x%x\n", Status);
+        exit(EXIT_FAILURE);
+    }
+    unbind();
+    
     return true;
 }
 
+// binds the fbo
 void GBuffer::bind() {
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 }
 
+// unbinds the fbo (binds to the standard framebuffer, 0)
 void GBuffer::unbind() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -59,14 +71,16 @@ void GBuffer::blit(GLuint target, int targetWidth, int targetHeight) {
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }
 
+// binds a color texture to the fbo and calls updateColorBuffers
 void GBuffer::addColorTexture(std::shared_ptr<ColorTexture> colorTexture) {
     bind();
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + colorTexture->index, GL_TEXTURE_2D, colorTexture->t_id, 0);
     colorTextures.push_back(colorTexture);
-    updateDrawBuffers();
+    updateColorBuffers();
     unbind();
 }
 
+// binds a depth texture to the fbo
 void GBuffer::setDepthTexture(std::shared_ptr<DepthTexture> depthTexture) {
     bind();
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, depthTexture->t_id, 0);
@@ -74,27 +88,20 @@ void GBuffer::setDepthTexture(std::shared_ptr<DepthTexture> depthTexture) {
     unbind();
 }
 
-void GBuffer::updateDrawBuffers() {
-    int numberOfDrawBuffers = NUM_TEXTURES;
-    GLuint drawBuffers[numberOfDrawBuffers];
-    for(int i = 0; i < numberOfDrawBuffers; i++) {
-        drawBuffers[i] = GL_COLOR_ATTACHMENT0 + i;
+// updates color buffers
+void GBuffer::updateColorBuffers() {
+    GLuint c_buffers[NUM_TEXTURES];
+    for(int i = 0; i < NUM_TEXTURES; i++) {
+        c_buffers[i] = GL_COLOR_ATTACHMENT0 + i;
     }
+    glDrawBuffers(NUM_TEXTURES, &c_buffers[0]);
     
-    glDrawBuffers(numberOfDrawBuffers, &drawBuffers[0]);
-    
-    bind();
-    GLenum Status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    
-    if (Status != GL_FRAMEBUFFER_COMPLETE) {
-        printf("frame buffer error, status: 0x%x\n", Status);
-        exit(EXIT_FAILURE);
-    }
-    unbind();
 }
 
+// Binds all attached color textures
 void GBuffer::bindTextures() {
-    for(auto it = colorTextures.begin(); it != colorTextures.end(); it++) {
+    std::vector<std::shared_ptr<ColorTexture>>::iterator it;
+    for(it = colorTextures.begin(); it != colorTextures.end(); it++) {
         (*it)->bind();
     }
     depthTexture->bind();

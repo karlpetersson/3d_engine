@@ -50,6 +50,17 @@ void Mesh::unbind() {
 }
 
 void Mesh::render(Scene *scene) {
+    
+    if(flipNormals) {
+        for(int i = 0; i < this->vertices->size; i++) {
+            this->vertices->buffer[i].norm.x *= -1;
+            this->vertices->buffer[i].norm.y *= -1;
+            this->vertices->buffer[i].norm.z *= -1;
+        }
+        this->load(this->material);
+        flipNormals = false;
+    }
+    
     bind();
     glDrawElements(GL_TRIANGLES, (GLsizei) this->indices.size(), GL_UNSIGNED_INT, NULL);
     unbind();

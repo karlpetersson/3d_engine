@@ -36,7 +36,7 @@ public:
         LIGHT_BINDING_POINT = 1
     };
     DeferredPhongShader();
-    void prepare(Scene *scene, Camera *camera);
+    void prepare(Scene *scene, Camera *camera, Light *light);
 };
 
 #endif /* defined(__Excercise_1__DeferredPhongShader__) */

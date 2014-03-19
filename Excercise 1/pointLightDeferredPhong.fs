@@ -46,8 +46,8 @@ void main()
     float att;
     float d = length(l_dir);
     float Kc = 1.0f;
-    float Kl = 0.1f;
-    float Kq = 0.02f;
+    float Kl = 0.2f;
+    float Kq = 0.05f;
     att = 1.0 / (Kc + (Kl*d) + (Kq*d*d));
     
     vec4 diffuse = texture(tex_diffuse, DataIn.uv);
@@ -66,5 +66,5 @@ void main()
         spec = specular * pow(intensitySpecular, shininess);
     }
     
-    outColor = max(((diffuse * intensity) + spec) * att, ambient);
+    outColor = max(((diffuse * intensity * l_color) + spec) * att, ambient);
 }

@@ -8,7 +8,7 @@
 
 #include "Renderer.h"
 
-Renderer::Renderer(GLFWwindow* window) {
+Renderer::Renderer(GLFWwindow* window) : quad(OFFParser::parse(PROJECT_PATH + "plane.off")){
     this->window = window;
     this->lightingShader = std::shared_ptr<DeferredPhongShader>(new DeferredPhongShader());
     this->geometryShader = std::shared_ptr<GeometryShader>(new GeometryShader());
@@ -20,6 +20,10 @@ Renderer::Renderer(GLFWwindow* window) {
     
     this->m_gbuffer = new GBuffer();
     m_gbuffer->init(width, height);
+    
+    // init unit quad
+    Material m;
+    quad.load(m);
 }
 
 Renderer::~Renderer() {
@@ -42,13 +46,9 @@ void Renderer::render(Scene *scene, Camera *camera) {
 void Renderer::forwardRender(Scene *scene, Camera*camera) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     
-    // use the current shader
     this->oldShader->use();
     
-    // for each mesh registered to the scene
     for (std::vector<Mesh *>::iterator it = scene->objects.begin() ; it != scene->objects.end(); it++) {
-        
-        // let shader upload data for that mesh
         this->oldShader->prepare(scene, camera, *it);
         
         (*it)->render(scene);
@@ -67,7 +67,7 @@ void Renderer::geometryPass(Scene *scene, Camera *camera) {
     // for each mesh registered to the scene
     for (std::vector<Mesh *>::iterator it = scene->objects.begin() ; it != scene->objects.end(); it++) {
         
-        // let shader upload data for that mesh
+        // upload material data for mesh to shader
         this->geometryShader->prepare(scene, camera, *it);
         
         (*it)->render(scene);
@@ -89,10 +89,12 @@ void Renderer::lightingPass(Scene *scene, Camera *camera) {
 
     m_gbuffer->bindTextures();
     
-    this->lightingShader->use();
-    this->lightingShader->prepare(scene, camera);
-
-    quad->render(scene);
+    for(auto it = scene->lights.begin(); it != scene->lights.end(); it++) {
+        this->lightingShader->use();
+        this->lightingShader->prepare(scene, camera, *it);
+        
+        quad.render(scene);
+    }
     
     glDepthMask(GL_TRUE);
     glDisable (GL_BLEND);

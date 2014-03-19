@@ -19,49 +19,15 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "constants.h"
+#include <gtkmm.h>
+#include "GUIController.h"
+#include <thread>
+
 
 GLFWwindow* initGl();
 
-float rotationY;
-glm::vec3 translation = glm::vec3(0.0,-1.0,-5.0);
-
-void updateProjection(GLFWwindow* window, Camera *camera);
-
-// Takes a window and generates an updated view-matrix based on keys pressed
-glm::mat4 updateView(GLFWwindow* window) {
-    glm::vec3 velocity;
-    
-    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-        rotationY -= 2.0;
-    }
-    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
-        rotationY += 2.0;
-    }
-    
-    if(glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        velocity.z += cosf(rotationY * M_PI / 180);
-        velocity.x -= sinf(rotationY * M_PI / 180);
-    }
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        velocity.z -= cosf(rotationY * M_PI / 180);
-        velocity.x += sinf(rotationY * M_PI / 180);
-    }
-    if(glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        velocity.z += sinf(rotationY * M_PI / 180);
-        velocity.x += cosf(rotationY * M_PI / 180);
-    }
-    if(glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        velocity.z -= sinf(rotationY * M_PI / 180);
-        velocity.x -= cosf(rotationY * M_PI / 180);
-    }
-    
-    if(glm::length(velocity) > 0) {
-        velocity = glm::normalize(velocity)*0.1f;
-        translation += velocity;
-    }
-    
-    return glm::translate(glm::rotate(glm::mat4(1.0), rotationY, glm::vec3(0.0,1.0,0.0)), translation);
-}
+bool shouldLoadFile;
+std::string fileNameToLoad;
 
 void updateProjection(GLFWwindow* window, Camera *camera) {
     if(glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
@@ -78,8 +44,14 @@ void updateProjection(GLFWwindow* window, Camera *camera) {
     }
 }
 
+int displayGui(int argc, char *argv[], Camera *camera, Light *light, Material *material, bool *flipNormals, bool *shouldLoadNewFile, std::string *filename) {
+    Glib::RefPtr<Gtk::Application> app = Gtk::Application::create(argc, argv, "org.gtkmm.example");
+    GUIController *gui = new GUIController(camera, light, material, flipNormals, shouldLoadNewFile, filename);
+    return app->run(*gui);
+}
 
-int main(int argc, const char * argv[]) {
+
+int main(int argc, char * argv[]) {
     
     // init OpenGL
     GLFWwindow* window = initGl();
@@ -91,10 +63,9 @@ int main(int argc, const char * argv[]) {
     Mesh mesh = OFFParser::parse(PROJECT_PATH + "cooldragon.off");
     Mesh mesh2 = OFFParser::parse(PROJECT_PATH + "cooldragon.off");
     Mesh floor = OFFParser::parse(PROJECT_PATH + "plane.off");
-    Mesh quad = OFFParser::parse(PROJECT_PATH + "plane.off");
 
     // Create materials for meshes
-    Material meshMaterial;
+    /*Material meshMaterial;
     meshMaterial.ambient = glm::vec4(0.01f, 0.01f, 0.01f, 1.0f);
     meshMaterial.diffuse = glm::vec4(0.5f, 0.5f, 0.7f, 1.0f);
     meshMaterial.specular = glm::vec4(0.6f, 0.6f, 0.7f, 1.0f);
@@ -104,21 +75,24 @@ int main(int argc, const char * argv[]) {
     meshMaterial2.ambient = glm::vec4(0.1, 0.05, 0.05, 1.0);
     meshMaterial2.diffuse = glm::vec4(0.7, 0.3, 0.3, 1.0);
     meshMaterial2.specular = glm::vec4(0.8, 0.8, 0.8, 1.0);
-    meshMaterial2.shininess = 150.0;
+    meshMaterial2.shininess = 150.0;*/
+    
+    Material meshMaterial;
+    meshMaterial.ambient = glm::vec4(0.01f, 0.01f, 0.01f, 1.0f);
+    meshMaterial.diffuse = glm::vec4(0.9f, 0.8f, 0.8f, 1.0f);
+    meshMaterial.specular = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    meshMaterial.shininess = 250.0f;
     
     Material floorMaterial;
     floorMaterial.ambient = glm::vec4(0.1, 0.1, 0.1, 1.0);
-    floorMaterial.diffuse = glm::vec4(0.4, 0.4, 0.4, 1.0);
+    floorMaterial.diffuse = glm::vec4(0.6, 0.6, 0.6, 1.0);
     floorMaterial.specular = glm::vec4(0.0, 0.0, 0.0, 1.0);
-    floorMaterial.shininess = 15.0;
+    floorMaterial.shininess = 5.0f;
 
     // load meshes with materials
     mesh.load(meshMaterial);
-    mesh2.load(meshMaterial2);
-    quad.load(meshMaterial);
+    mesh2.load(meshMaterial);
     
-    renderer.quad = &quad;
-
     mesh.translate(glm::vec3(0.0f ,0.5f, 0.0f));
     mesh2.translate(glm::vec3(2.0f ,0.5f, 0.0f));
     
@@ -130,22 +104,42 @@ int main(int argc, const char * argv[]) {
     
     // Create scene and camera
     Scene scene = Scene();
-    Camera camera = Camera();
+    Camera camera = Camera(window, 60.0f, 800.0f/600.0f, 0.1f, 1000.0f);
     
     // create one light
     Light light = Light(glm::vec4(0.0f, 4.0f, 0.0f, 1.0f), glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-    light.translate(glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+    light.translate(glm::vec4(3.0f, 0.0f, 0.0f, 1.0f));
+
+    Light light2 = Light(glm::vec4(0.0f, 4.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+    light2.translate(glm::vec4(-3.0f, 0.0f, 1.0f, 1.0f));
+    
+    Light light3 = Light(glm::vec4(0.0f, 4.0f, 0.0f, 1.0f), glm::vec4(1.0f, 0.7f, 0.7f, 1.0f));
+    light3.translate(glm::vec4(0.0f, 0.0f, 3.0f, 1.0f));
     
     // Add meshes, light and floor to the scene
     scene.add(&mesh);
     scene.add(&mesh2);
     scene.add(&light);
+    scene.add(&light2);
+    scene.add(&light3);
     scene.add(&floor);
+    
+    std::thread thr = std::thread(displayGui, argc, argv, &camera, &light, &mesh2.material, &mesh2.flipNormals, &shouldLoadFile, &fileNameToLoad);
 
     while(!glfwWindowShouldClose(window))
     {
+        
+        if(shouldLoadFile) {
+            mesh2 = OFFParser::parse(PROJECT_PATH + fileNameToLoad);
+            mesh2.load(meshMaterial);
+            mesh2.translate(glm::vec3(2.0f ,0.5f, 0.0f));
+            shouldLoadFile = false;
+        }
+        
         // Update the cameras view matrix each frame
-        camera.view = updateView(window);
+        //camera.view = updateView(window);
+        camera.update();
+        //camera.updateMovementBezier();
         updateProjection(window, &camera);
         
         mesh2.rotate(glm::vec3(0.0f, 0.5f, 0.0f), 1.0f);
@@ -155,6 +149,8 @@ int main(int argc, const char * argv[]) {
     }
     
     glfwTerminate();
+    
+    thr.join();
     
     return 0;
 }
@@ -182,8 +178,8 @@ GLFWwindow* initGl() {
     glewExperimental = GL_TRUE;
     glewInit();
     
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    glDisable(GL_CULL_FACE);
+    //glCullFace(GL_BACK);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
     

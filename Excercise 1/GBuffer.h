@@ -20,31 +20,20 @@
 class GBuffer {
 public:
     
-    enum GBUFFER_TEXTURE_TYPE {
-        GBUFFER_TEXTURE_TYPE_NORMAL,
-        GBUFFER_TEXTURE_TYPE_DIFFUSE,
-        GBUFFER_TEXTURE_TYPE_AMBIENT,
-        GBUFFER_TEXTURE_TYPE_SPECULAR,
-        GBUFFER_TEXTURE_TYPE_SHININESS,
-        GBUFFER_TEXTURE_TYPE_DEPTH,
-        GBUFFER_NUM_TEXTURES
-    };
-    
-    GLuint m_textures[GBUFFER_NUM_TEXTURES];
-    GLuint m_depthTexture;
-    
     GBuffer() {};
     ~GBuffer() {};
     
     bool init(unsigned int WindowWidth, unsigned int WindowHeight);
+    
     void bind();
     void unbind();
-    void blit(GLuint target, int targetWidth, int targetHeight);
+    
     void bindTextures();
     void addColorTexture(std::shared_ptr<ColorTexture> colorTexture);
     void setDepthTexture(std::shared_ptr<DepthTexture> depthTexture);
-    void updateDrawBuffers();
-    
+    void updateColorBuffers();
+    void blit(GLuint target, int targetWidth, int targetHeight);
+
 private:
     int width;
     int height;
@@ -52,7 +41,6 @@ private:
     std::vector<std::shared_ptr<ColorTexture>> colorTextures;
     std::shared_ptr<DepthTexture> depthTexture;
 
-    
     GLuint m_fbo;
 };
 

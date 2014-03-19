@@ -33,6 +33,7 @@ private:
     GLuint vao;
 public:
     Material material;
+    bool flipNormals;
     
     std::vector<unsigned int> indices;
     VertexBuffer *vertices;

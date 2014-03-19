@@ -8,9 +8,8 @@
 
 #include "ColorTexture.h"
 
-void ColorTexture::init(int width, int height, TEXTURE_TYPE type) {
-    this->width = width;
-    this->height = height;
+void ColorTexture::init(unsigned int width, unsigned int height, TEXTURE_TYPE type) {
+ 
     this->index = type;
     
     glGenTextures(1, &t_id);
